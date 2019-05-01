@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuc.with_boot.mapper.AdMapper">
+
+    <select id="adSearch" parameterType="Map" resultType="Map">
+        SELECT
+            uuid,
+            position,
+            path,
+            support,
+            pay,
+            DATE_FORMAT(starttime,'%Y-%m-%d') as starttime,
+            DATE_FORMAT(endtime,'%Y-%m-%d') as endtime,
+            contact,
+            msisdn,
+            level,
+            userid
+        FROM
+            ad
+        <if test="position != null and position !=''">
+          and  position = #{position,jdbcType=VARCHAR}
+        </if>
+        <if test="path != null and path !=''">
+            and  path = #{path,jdbcType=VARCHAR}
+        </if>
+        <if test="support != null and support !=''">
+            and  support = #{support,jdbcType=VARCHAR}
+        </if>
+        <if test="pay != null and pay !=''">
+            and  pay = #{pay,jdbcType=VARCHAR}
+        </if>
+        <if test="contact != null and contact !=''">
+            and contact = #{contact,jdbcType=VARCHAR}
+        </if>
+        <if test="msisdn != null and msisdn !=''">
+            and  msisdn = #{msisdn,jdbcType=VARCHAR}
+        </if>
+        <if test="level != null and level !=''">
+            and level = #{level,jdbcType=VARCHAR}
+        </if>
+        <if test="userid != null and userid !=''">
+            and userid = #{userid,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="adInsert" parameterType="map">
+       INSERT INTO ad (
+            uuid,
+            position,
+            path,
+            support,
+            pay,
+            starttime,
+            endtime,
+            contact,
+            msisdn,
+            LEVEL,
+            userid
+        )
+        VALUES
+            (#{uuid,jdbcType=VARCHAR},#{position,jdbcType=VARCHAR},
+            #{path,jdbcType=VARCHAR},#{support,jdbcType=VARCHAR},
+            #{pay,jdbcType=VARCHAR},#{starttime,jdbcType=VARCHAR},
+            #{endtime,jdbcType=VARCHAR},#{contact,jdbcType=VARCHAR},
+            #{msisdn,jdbcType=VARCHAR},#{level,jdbcType=VARCHAR},
+            #{userid,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="adUpdate" parameterType="map">
+        update ad
+        <set>
+            <if test="position != null and position !=''">
+                position = #{position,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null and path !=''">
+                path = #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="support != null and support !=''">
+                support = #{support,jdbcType=VARCHAR},
+            </if>
+            <if test="pay != null and pay !=''">
+                pay = #{pay,jdbcType=VARCHAR},
+            </if>
+            <if test="starttime != null and starttime !=''">
+                starttime = #{starttime,jdbcType=VARCHAR},
+            </if>
+            <if test="endtime != null and endtime !=''">
+                endtime = #{endtime,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null and contact !=''">
+                contact = #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="msisdn != null and msisdn !=''">
+                msisdn = #{msisdn,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null and level !=''">
+                level = #{level,jdbcType=VARCHAR},
+            </if>
+            <if test="userid != null and userid !=''">
+                userid = #{userid,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where uuid = #{uuid,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="adDel" parameterType="String">
+        delete from ad
+          where uuid in
+            <foreach collection="ids" item="id" open="(" separator="," close=")">
+                #{id,jdbcType=VARCHAR}
+            </foreach>
+    </delete>
+</mapper>
